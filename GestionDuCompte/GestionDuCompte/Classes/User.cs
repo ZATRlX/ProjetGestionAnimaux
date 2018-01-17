@@ -31,130 +31,30 @@ namespace GestionDuCompte.Classes
         private int agendaUser;
 
         //Get-Setters
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-            set
-            {
-                name = value;
-            }
-        }
-        public string Pseudo
-        {
-            get
-            {
-                return pseudo;
-            }
-            set
-            {
-                pseudo = value;
-            }
-        }
-        public string Mail
-        {
-            get
-            {
-                return mail;
-            }
-            set
-            {
-                mail = value;
-            }
-        }
-        public string Password
-        {
-            get
-            {
-                return password;
-            }
-            set
-            {
-                password = value;
-            }
-        }
-        public string PassPhrase
-        {
-            get
-            {
-                return passPhrase;
-            }
-            set
-            {
-                passPhrase = value;
-            }
-        }
-        public string Answer
-        {
-            get
-            {
-                return answer;
-            }
-            set
-            {
-                answer = value;
-            }
-        }
-        public List<string> LstAnimals
-        {
-            get
-            {
-                return lstAnimals;
-            }
-            set
-            {
-                lstAnimals = value;
-            }
-        }
-        public List<Dictionary<DateTime, string>> LstPublic
-        {
-            get
-            {
-                return lstPublic;
-            }
-            set
-            {
-                lstPublic = value;
-            }
-        }
-        public string StrPreferenceColor
-        {
-            get
-            {
-                return strPreferenceColor;
-            }
-            set
-            {
-                strPreferenceColor = value;
-            }
-        }
-        public int ProfilePicture
-        {
-            get
-            {
-                return profilePicture;
-            }
-            set
-            {
-                profilePicture = value;
-            }
-        }
-        public int AgendaUser
-        {
-            get
-            {
-                return agendaUser;
-            }
-            set
-            {
-                agendaUser = value;
-            }
-        }
+        public string Name { get => name; set => name = value; }
+        public string Pseudo { get => pseudo; set => pseudo = value; }
+        public string Mail { get => mail; set => mail = value; }
+        public string Password { get => password; set => password = value; }
+        public string PassPhrase { get => passPhrase; set => passPhrase = value; }
+        public string Answer { get => answer; set => answer = value; }
+        public List<string> LstAnimals { get => lstAnimals; set => lstAnimals = value; }
+        public List<Dictionary<DateTime, string>> LstPublic { get => lstPublic; set => lstPublic = value; }
+        public string StrPreferenceColor { get => strPreferenceColor; set => strPreferenceColor = value; }
+        public int ProfilePicture { get => profilePicture; set => profilePicture = value; }
+        public int AgendaUser { get => agendaUser; set => agendaUser = value; }
 
         //Constructeur
-        public User(string name, string pseudo, string mail,string password, string passPhrase, string answer, List<string> lstAnimals, List<Dictionary<DateTime, string>> lstPublic, string strPreferenceColor, int profilePicture, int agendaUser)
+        /// <summary>
+        /// Constructeur de la classe User
+        /// </summary>
+        /// <param name="name">Nom</param>
+        /// <param name="pseudo">Pseudonyme</param>
+        /// <param name="mail">Adresse mail</param>
+        /// <param name="password">Mot de passe</param>
+        /// <param name="passPhrase">Phrase secrète</param>
+        /// <param name="answer">Réponse à la phrase secrète</param>
+        /// <param name="profilePicture">Photo de profil</param>
+        public User(string name, string pseudo, string mail,string password, string passPhrase, string answer, int profilePicture)
         {
             Name = name;
             Pseudo = pseudo;
@@ -162,16 +62,15 @@ namespace GestionDuCompte.Classes
             Password = password;
             PassPhrase = passPhrase;
             Answer = answer;
-            LstAnimals = lstAnimals;
-            LstPublic = lstPublic;
-            StrPreferenceColor = strPreferenceColor;
             ProfilePicture = profilePicture;
-            AgendaUser = agendaUser;
             lstUser.Add(this);
         }
 
         //TODO Pseudo utilisé comme repère
         //TODO METHODES A METTRE DANS LE MODEL & LIER A LA BD
+        /// <summary>
+        /// Méthode servant à actualiser les données de l'utilisateur avec la base de donnée
+        /// </summary>
         public void ActualizeUser()
         {
             //TODO Ajouter les variables restantes à la BD
@@ -182,6 +81,9 @@ namespace GestionDuCompte.Classes
             currentUser.Answer = Convert.ToString(ExecuteQuery(@"SELECT Answer FROM t_user WHERE Pseudo = " + currentUser.Pseudo + ";"));
             currentUser.ProfilePicture = Convert.ToInt32(ExecuteQuery(@"SELECT ProfilePicture FROM t_user WHERE Pseudo = " + currentUser.Pseudo + ";"));
         }
+        /// <summary>
+        /// Méthode servant à sauvegarder les changement de l'utilisateur dans la base de donnée
+        /// </summary>
         public void SaveUserChanges()
         {
             //TODO Ajouter les variables restantes à la BD
@@ -192,70 +94,33 @@ namespace GestionDuCompte.Classes
             ExecuteQuery(@"UPDATE t_user SET Answer = " + currentUser.Answer + "WHERE Pseudo = " + currentUser.Pseudo + ";");
             ExecuteQuery(@"UPDATE t_user SET ProfilePicture = " + currentUser.ProfilePicture + "WHERE Pseudo = " + currentUser.Pseudo + ";");
         }
-        public string GetUserName()
-        {
-            return currentUser.Name;
-        }
-        public void ChangeUserName(string name)
-        {
-            currentUser.Name = name;
-        }
-        public string GetUserPseudo()
-        {
-            return currentUser.Pseudo;
-        }
-        public void ChangeUserPseudo(string pseudo)
-        {
-            currentUser.Pseudo = pseudo;
-        }
-        public string GetUserMail()
-        {
-            return currentUser.Mail;
-        }
-        public void ChangeUserMail(string mail)
-        {
-            currentUser.Mail = mail;
-        }
-        public string GetUserPassword()
-        {
-            return currentUser.Password;
-        }
-        public void ChangeUserPassword(string password)
-        {
-            currentUser.Password = password;
-        }
-        public string GetUserPassPhrase()
-        {
-            return currentUser.PassPhrase;
-        }
-        public void ChangeUserPassPhrase(string passPhrase)
-        {
-            currentUser.PassPhrase = passPhrase;
-        }
-        public string GetUserAnswer()
-        {
-            return currentUser.Answer;
-        }
-        public void ChangeUserAnswer(string answer)
-        {
-            currentUser.Answer = answer;
-        }
-        public List<string> GetLstAnimals()
-        {
-            return currentUser.LstAnimals;
-        }
+        //
+
         //TODO Foreach lstAnimals
+        /// <summary>
+        /// Prend un animal de la liste de l'utilisateur
+        /// </summary>
+        /// <param name="nameAnimal">Nom de l'animal</param>
+        /// <returns></returns>
         public string GetAnimal(string nameAnimal)
         {
             return nameAnimal;
         }
+        /// <summary>
+        /// Ajoute un animal à la liste de l'utilisateur
+        /// </summary>
+        /// <param name="animal">Nom de l'animal</param>
         public void AddAnimal(string animal)
         {
-            currentUser.LstAnimals.Add(animal);
+            LstAnimals.Add(animal);
         }
+        /// <summary>
+        /// Enlève un animal de la liste de l'utilisateur
+        /// </summary>
+        /// <param name="animal">Nom de l'animal</param>
         public void RemoveAnimal(string animal)
         {
-            currentUser.LstAnimals.Remove(animal);
+            LstAnimals.Remove(animal);
         }
         //TODO lstPublic, preferenceColor, profilPicture, agendaUser
         
@@ -269,6 +134,7 @@ namespace GestionDuCompte.Classes
 
         //Objet "lecteur" de données 
         SqlDataReader rdr;
+        
 
         /// <summary>
         /// Execute les commandes SQL dans la base de donnée
