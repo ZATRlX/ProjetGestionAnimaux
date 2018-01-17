@@ -72,11 +72,11 @@ namespace GestionDuCompte.Classes
         {
             //TODO Ajouter les variables restantes à la BD
             currentAnimal.Specie = Convert.ToString(ExecuteQuery(@"SELECT Specie FROM t_animals WHERE Name = " + currentAnimal.Name + ";"));
-            currentAnimal.Age = Convert.ToString(ExecuteQuery(@"SELECT Age FROM t_animals WHERE Name = " + currentAnimal.Name + ";"));
-            currentAnimal.Gender = Convert.ToString(ExecuteQuery(@"SELECT Gender FROM t_animals WHERE Name = " + currentAnimal.Name + ";"));
-            currentAnimal.Alive = Convert.ToString(ExecuteQuery(@"SELECT Alive FROM t_animals WHERE Name = " + currentAnimal.Name + ";"));
-            currentAnimal.Avatar = Convert.ToString(ExecuteQuery(@"SELECT Avatar FROM t_animals WHERE Name = " + currentAnimal.Name + ";"));
-            currentAnimal.Birthday = Convert.ToString(ExecuteQuery(@"SELECT Birthday FROM t_animals WHERE Name = " + currentAnimal.Name + ";"));
+            currentAnimal.Age = Convert.ToInt32(ExecuteQuery(@"SELECT Age FROM t_animals WHERE Name = " + currentAnimal.Name + ";"));
+            currentAnimal.Gender = Convert.ToBoolean(ExecuteQuery(@"SELECT Gender FROM t_animals WHERE Name = " + currentAnimal.Name + ";"));
+            currentAnimal.Alive = Convert.ToBoolean(ExecuteQuery(@"SELECT Alive FROM t_animals WHERE Name = " + currentAnimal.Name + ";"));
+            currentAnimal.Avatar = Convert.ToInt32(ExecuteQuery(@"SELECT Avatar FROM t_animals WHERE Name = " + currentAnimal.Name + ";"));
+            currentAnimal.Birthday = Convert.ToDateTime(ExecuteQuery(@"SELECT Birthday FROM t_animals WHERE Name = " + currentAnimal.Name + ";"));
         }
         /// <summary>
         /// Méthode servant à sauvegarder les changement de l'utilisateur dans la base de donnée
@@ -98,7 +98,13 @@ namespace GestionDuCompte.Classes
         /// <param name="died">Est mort ou non</param>
         public void Died(bool died)
         {
-            Alive = died;
+            Alive = !died;
+            if (died)
+            {
+                Avatar = 0;//TODO Avatar = Image Grave in Classes, Traitement & Agenda = Null
+                Traitement = 0;
+                AgendaAnimal = 0;
+            }
         }
         /// <summary>
         /// Rajoute une année à l'animal
@@ -106,7 +112,7 @@ namespace GestionDuCompte.Classes
         /// <param name="birthday">Permet de savoir si c'est l'anniversaire de l'animal</param>
         public void IsBirthday(bool birthday)
         {
-            if (birthday)
+            if (birthday && Alive)
             {
                 Age++;
             }
