@@ -22,7 +22,7 @@ namespace GestionDuCompte.Classes
         private string passPhrase;
         private string answer;
         //TODO Faire une liste de la classe animal
-        private List<string> lstAnimals = new List<string>();
+        private List<Animal> lstAnimals = new List<Animal>();
         private List<Dictionary<DateTime, string>> lstPublic = new List<Dictionary<DateTime, string>>();
         private string strPreferenceColor;
         //TODO Chercher le type d'une image
@@ -37,7 +37,7 @@ namespace GestionDuCompte.Classes
         public string Password { get => password; set => password = value; }
         public string PassPhrase { get => passPhrase; set => passPhrase = value; }
         public string Answer { get => answer; set => answer = value; }
-        public List<string> LstAnimals { get => lstAnimals; set => lstAnimals = value; }
+        public List<Animal> LstAnimals { get => lstAnimals; set => lstAnimals = value; }
         public List<Dictionary<DateTime, string>> LstPublic { get => lstPublic; set => lstPublic = value; }
         public string StrPreferenceColor { get => strPreferenceColor; set => strPreferenceColor = value; }
         public int ProfilePicture { get => profilePicture; set => profilePicture = value; }
@@ -102,15 +102,22 @@ namespace GestionDuCompte.Classes
         /// </summary>
         /// <param name="nameAnimal">Nom de l'animal</param>
         /// <returns></returns>
-        public string GetAnimal(string nameAnimal)
+        public Animal GetAnimal(string nameAnimal)
         {
-            return nameAnimal;
+            foreach (Animal animal in LstAnimals)
+            {
+                if (animal.Name == nameAnimal)
+                {
+                    return animal;
+                }
+            }
+            return LstAnimals[0];
         }
         /// <summary>
         /// Ajoute un animal à la liste de l'utilisateur
         /// </summary>
         /// <param name="animal">Nom de l'animal</param>
-        public void AddAnimal(string animal)
+        public void AddAnimal(Animal animal)
         {
             LstAnimals.Add(animal);
         }
@@ -118,7 +125,7 @@ namespace GestionDuCompte.Classes
         /// Enlève un animal de la liste de l'utilisateur
         /// </summary>
         /// <param name="animal">Nom de l'animal</param>
-        public void RemoveAnimal(string animal)
+        public void RemoveAnimal(Animal animal)
         {
             LstAnimals.Remove(animal);
         }

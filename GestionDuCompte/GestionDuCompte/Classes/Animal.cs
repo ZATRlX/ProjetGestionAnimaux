@@ -62,6 +62,7 @@ namespace GestionDuCompte.Classes
             Birthday = birthday;
             Food = food;
             Owner = owner;
+            Owner.AddAnimal(this);
         }
 
         //TODO METHODES A METTRE DANS LE MODEL & LIER A LA BD
