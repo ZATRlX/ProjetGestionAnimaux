@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
@@ -7,6 +8,8 @@ namespace GestionDuCompte.Classes
 {
     public class Animal
     {
+        public Animal currentAnimal;
+
         //Variables
         private string species;
         private string name;
@@ -59,10 +62,36 @@ namespace GestionDuCompte.Classes
             Birthday = birthday;
             Food = food;
             Owner = owner;
-            User usr = new User("b", "b", "b", "b", "b", "b", 1);
         }
 
-        //Méthodes
+        //TODO METHODES A METTRE DANS LE MODEL & LIER A LA BD
+        /// <summary>
+        /// Méthode servant à actualiser les données de l'utilisateur avec la base de donnée
+        /// </summary>
+        public void ActualizeUser()
+        {
+            //TODO Ajouter les variables restantes à la BD
+            currentAnimal.Specie = Convert.ToString(ExecuteQuery(@"SELECT Specie FROM t_animals WHERE Name = " + currentAnimal.Name + ";"));
+            currentAnimal.Age = Convert.ToString(ExecuteQuery(@"SELECT Age FROM t_animals WHERE Name = " + currentAnimal.Name + ";"));
+            currentAnimal.Gender = Convert.ToString(ExecuteQuery(@"SELECT Gender FROM t_animals WHERE Name = " + currentAnimal.Name + ";"));
+            currentAnimal.Alive = Convert.ToString(ExecuteQuery(@"SELECT Alive FROM t_animals WHERE Name = " + currentAnimal.Name + ";"));
+            currentAnimal.Avatar = Convert.ToString(ExecuteQuery(@"SELECT Avatar FROM t_animals WHERE Name = " + currentAnimal.Name + ";"));
+            currentAnimal.Birthday = Convert.ToString(ExecuteQuery(@"SELECT Birthday FROM t_animals WHERE Name = " + currentAnimal.Name + ";"));
+        }
+        /// <summary>
+        /// Méthode servant à sauvegarder les changement de l'utilisateur dans la base de donnée
+        /// </summary>
+        public void SaveUserChanges()
+        {
+            //TODO Ajouter les variables restantes à la BD
+            ExecuteQuery(@"UPDATE t_Animal SET Specie = " + currentAnimal.Specie + "WHERE Name = " + currentAnimal.Name + ";");
+            ExecuteQuery(@"UPDATE t_Animal SET Age = " + currentAnimal.Age + "WHERE Name = " + currentAnimal.Name + ";");
+            ExecuteQuery(@"UPDATE t_Animal SET Gender = " + currentAnimal.Gender + "WHERE Name = " + currentAnimal.Name + ";");
+            ExecuteQuery(@"UPDATE t_Animal SET Alive = " + currentAnimal.Alive + "WHERE Name = " + currentAnimal.Name + ";");
+            ExecuteQuery(@"UPDATE t_Animal SET Avatar = " + currentAnimal.Avatar + "WHERE Name = " + currentAnimal.Name + ";");
+            ExecuteQuery(@"UPDATE t_Animal SET Birthday = " + currentAnimal.Birthday + "WHERE Name = " + currentAnimal.Name + ";");
+        }
+        //
         /// <summary>
         /// Permet de dire si un animal est décédé
         /// </summary>
@@ -81,6 +110,44 @@ namespace GestionDuCompte.Classes
             {
                 Age++;
             }
+        }
+
+
+        //HACK SQL
+        //string servant de connection à la base de donnée. Utilisé dans l'objet MySqlConnection.
+        static string connectionString = @"server=localhost;userid=root;password=;database=db_smartphones";
+
+        //Objet qui sera utilisé dans les méthodes qui récupèrent des données
+        SqlConnection connection = new SqlConnection(connectionString);
+
+        //Objet "lecteur" de données 
+        SqlDataReader rdr;
+
+
+        /// <summary>
+        /// Execute les commandes SQL dans la base de donnée
+        /// </summary>
+        /// <param name="query">commande à executer</param>
+        /// <returns>MySqlDataReader rdr</returns>
+        private SqlDataReader ExecuteQuery(string query)
+        {
+            SqlCommand acmd = new SqlCommand(query, connection);
+
+            //Se connecte à la base de donnée
+            if (connection != null && connection.State == connectionState.Closed)
+            {
+                connection.Open();
+            }
+
+            if (rdr != null)
+            {
+                rdr.Close();
+            }
+
+            //Execute la commande
+            rdr = acmd.ExecuteReader();
+
+            return rdr;
         }
     }
 }
