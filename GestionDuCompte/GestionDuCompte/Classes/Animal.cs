@@ -17,7 +17,7 @@ namespace GestionDuCompte.Classes
         private bool gender;
         private bool alive;
         private int avatar;
-        private int agendaAnimal;
+        private Dictionary<string, string> agendaAnimal;
         private DateTime birthday;
         private int food;
         private Dictionary<DateTime, float> weight = new Dictionary<DateTime, float>();
@@ -31,7 +31,7 @@ namespace GestionDuCompte.Classes
         public bool Gender { get => gender; set => gender = value; }
         public bool Alive { get => alive; set => alive = value; }
         public int Avatar { get => avatar; set => avatar = value; }
-        public int AgendaAnimal { get => agendaAnimal; set => agendaAnimal = value; }
+        public Dictionary<string, string> AgendaAnimal { get => agendaAnimal; set => agendaAnimal = value; }
         public DateTime Birthday { get => birthday; set => birthday = value; }
         public int Food { get => food; set => food = value; }
         public Dictionary<DateTime, float> Weight { get => weight; set => weight = value; }

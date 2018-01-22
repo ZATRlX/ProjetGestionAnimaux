@@ -23,12 +23,12 @@ namespace GestionDuCompte.Classes
         private string answer;
         //TODO Faire une liste de la classe animal
         private List<Animal> lstAnimals = new List<Animal>();
-        private List<Dictionary<DateTime, string>> lstPublic = new List<Dictionary<DateTime, string>>();
+        private Dictionary<string, string> lstPublic = new Dictionary<string, string>();
         private string strPreferenceColor;
         //TODO Chercher le type d'une image
         private int profilePicture;
         //TODO Créer la classe Agenda
-        private int agendaUser;
+        private Dictionary<DateTime, string> agendaUser;
 
         //Get-Setters
         public string Name { get => name; set => name = value; }
@@ -38,10 +38,10 @@ namespace GestionDuCompte.Classes
         public string PassPhrase { get => passPhrase; set => passPhrase = value; }
         public string Answer { get => answer; set => answer = value; }
         public List<Animal> LstAnimals { get => lstAnimals; set => lstAnimals = value; }
-        public List<Dictionary<DateTime, string>> LstPublic { get => lstPublic; set => lstPublic = value; }
+        public Dictionary<string, string> LstPublic { get => lstPublic; set => lstPublic = value; }
         public string StrPreferenceColor { get => strPreferenceColor; set => strPreferenceColor = value; }
         public int ProfilePicture { get => profilePicture; set => profilePicture = value; }
-        public int AgendaUser { get => agendaUser; set => agendaUser = value; }
+        public Dictionary<DateTime, string> AgendaUser { get => agendaUser; set => agendaUser = value; }
 
         //Constructeur
         /// <summary>
@@ -80,6 +80,7 @@ namespace GestionDuCompte.Classes
             currentUser.PassPhrase = Convert.ToString(ExecuteQuery(@"SELECT PassPhrase FROM t_user WHERE Pseudo = " + currentUser.Pseudo + ";"));
             currentUser.Answer = Convert.ToString(ExecuteQuery(@"SELECT Answer FROM t_user WHERE Pseudo = " + currentUser.Pseudo + ";"));
             currentUser.ProfilePicture = Convert.ToInt32(ExecuteQuery(@"SELECT ProfilePicture FROM t_user WHERE Pseudo = " + currentUser.Pseudo + ";"));
+            ActualizeAgendaUser();
         }
         /// <summary>
         /// Méthode servant à sauvegarder les changement de l'utilisateur dans la base de donnée
@@ -93,6 +94,92 @@ namespace GestionDuCompte.Classes
             ExecuteQuery(@"UPDATE t_user SET PassPhrase = " + currentUser.PassPhrase + "WHERE Pseudo = " + currentUser.Pseudo + ";");
             ExecuteQuery(@"UPDATE t_user SET Answer = " + currentUser.Answer + "WHERE Pseudo = " + currentUser.Pseudo + ";");
             ExecuteQuery(@"UPDATE t_user SET ProfilePicture = " + currentUser.ProfilePicture + "WHERE Pseudo = " + currentUser.Pseudo + ";");
+        }
+
+        public void ActualizeAgendaUser()
+        {
+            foreach(Animal animal in currentUser.LstAnimals)
+            {
+                string currentID = Convert.ToString(ExecuteQuery(@"SELECT idAnimals FROM t_animals WHERE Name = " + animal.Name + ";"));
+                List<string> lstTemp = new List<string>();
+                List<string> lstTempDate = new List<string>();
+                List<string> lstTempDescrib = new List<string>();
+                int i;
+
+                //planned
+                i = 0;
+                rdr = ExecuteQuery(@"SELECT idVisit FROM planned WHERE idAnimals = " + currentID + ";");
+                while (rdr.Read())
+                {
+                    lstTemp.Add(Convert.ToString(rdr.GetValue(i)));
+                    i++;
+                }
+                i = 0;
+                foreach(string id in lstTemp)
+                {
+                    rdr = ExecuteQuery(@"SELECT visDate FROM t_visit WHERE idVisit = " + id + ";");
+                    while (rdr.Read())
+                    {
+                        lstTempDate.Add(Convert.ToString(rdr.GetValue(i)));
+                        i++;
+                    }
+                    i = 0;
+                    rdr = ExecuteQuery(@"SELECT visDescription FROM t_visit WHERE idVisit = " + id + ";");
+                    while (rdr.Read())
+                    {
+                        lstTempDescrib.Add(Convert.ToString(rdr.GetValue(i)));
+                        i++;
+                    }
+                }
+                i = 0;
+                foreach(string date in lstTempDate)
+                {
+                    animal.AgendaAnimal.Add(date, lstTempDescrib[i]);
+                    ++i;
+                }
+                lstTemp.Clear();
+                lstTempDate.Clear();
+                lstTempDescrib.Clear();
+
+                //follow
+                i = 0;
+                rdr = ExecuteQuery(@"SELECT id_vaccine FROM take WHERE idAnimals = " + currentID + ";");
+                while (rdr.Read())
+                {
+                    lstTemp.Add(Convert.ToString(rdr.GetValue(i)));
+                    i++;
+                }
+                i = 0;
+                foreach (string id in lstTemp)
+                {
+                    rdr = ExecuteQuery(@"SELECT vacDate FROM t_vaccine WHERE id_vaccine = " + id + ";");
+                    while (rdr.Read())
+                    {
+                        lstTempDate.Add(Convert.ToString(rdr.GetValue(i)));
+                        i++;
+                    }
+                    i = 0;
+                    rdr = ExecuteQuery(@"SELECT vacName FROM t_vaccine WHERE id_vaccine = " + id + ";");
+                    while (rdr.Read())
+                    {
+                        lstTempDescrib.Add(Convert.ToString(rdr.GetValue(i)));
+                        i++;
+                    }
+                }
+                i = 0;
+                foreach (string date in lstTempDate)
+                {
+                    animal.AgendaAnimal.Add(date, lstTempDescrib[i]);
+                    ++i;
+                }
+                lstTemp.Clear();
+                lstTempDate.Clear();
+                lstTempDescrib.Clear();
+
+                //birthday
+                //TODO Continue
+                if (System.DateTime.UtcNow - animal.Birthday <= 0) ;
+            }
         }
         //
 
