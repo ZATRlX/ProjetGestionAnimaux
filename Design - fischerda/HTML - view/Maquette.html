@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <title>Maquette</title>
     <link rel="stylesheet" href="base.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body>
     <header>
-        <h1>Pet Factor</h1>
+        <h1 id="anchor">Pet Factor</h1>
     </header>
 
     <!--
@@ -17,28 +19,43 @@
         <!--
         Navigation
         -->
-        <nav>
-            <ul>
-                <li>
-                    <a href="Home.html">Accueil</a>
-                </li>
-                <li>
-                    <a href="MyPets.html">Mes Animaux</a>
-                </li>
-            </ul>
-        </nav>
+
+        <div class="w3-top">
+            <div class="w3-bar w3-white w3-padding w3-card" style="letter-spacing:4px;">
+                <a href="Home.html" class="w3-bar-item w3-button">PetFactor</a>
+                <!-- Right-sided navbar links. Hide them on small screens -->
+                <div class="w3-right w3-hide-small">
+                    <a  href="MyPets.html" class="w3-bar-item w3-button">Mes Animaux</a>
+                </div>
+            </div>
+        </div>
+
         <!--
         Content
         -->
-        <div>
+
+
+        <div class="w3-content" style="max-width:1100px">
+
+
+
+
+
+
+
+
 
         </div>
+
+
+
+
     </div>
-    <footer>
+    <footer class="footer">
         <!--
         Left side
         -->
-        <div>
+        <div id="left" class="MoulinSA">
             <ul>
                 <li>
                     <a href="Home.html">Accueil</a>
@@ -54,13 +71,13 @@
         <!--
         Middle side
         -->
-        <div>
-            <img id="anchor" src="image/arrow.png" alt="arrow up">
+        <div class="arrow">
+            <a href="#anchor"><img  src="image/whiteArrow.png" alt="arrow up"></a>
         </div>
         <!--
         Right side
         -->
-        <div>
+        <div id="right" class="MoulinSA">
             <h3>Site créé par Moulin SA</h3>
             <h5>Équipe de développement :</h5>
             <ul>
@@ -75,3 +92,7 @@
     </footer>
 </body>
 </html>
+
+
+
+
